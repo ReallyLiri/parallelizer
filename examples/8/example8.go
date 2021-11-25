@@ -10,11 +10,11 @@ func main() {
 	group := parallelizer.NewGroup()
 	defer group.Close()
 
-	group.Add(func() {
+	group.Add(func(workerId int) {
 		fmt.Println("Worker 1")
 	})
 
-	group.Add(func() {
+	group.Add(func(workerId int) {
 		fmt.Println("Worker 2")
 	})
 
@@ -24,7 +24,7 @@ func main() {
 
 	fmt.Println("Workers 1 and 2 have finished")
 
-	group.Add(func() {
+	group.Add(func(workerId int) {
 		fmt.Println("Worker 3")
 	})
 

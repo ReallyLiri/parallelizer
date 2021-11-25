@@ -12,7 +12,7 @@ func main() {
 	defer group.Close()
 
 	for i := 1; i <= 10; i++ {
-		group.Add(func() {
+		group.Add(func(workerId int) {
 			time.Sleep(time.Second)
 		})
 

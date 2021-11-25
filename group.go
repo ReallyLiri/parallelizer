@@ -9,35 +9,37 @@ const (
 	nilFunctionError = "nil function"
 )
 
+type Job func(workerId int)
+
 // NewGroup create a new group of workers
 func NewGroup(options ...GroupOption) *Group {
 	groupOptions := newGroupOptions(options...)
 
 	group := &Group{
-		jobsChannel: make(chan func(), groupOptions.JobQueueSize),
+		jobsChannel: make(chan Job, groupOptions.JobQueueSize),
 		waitGroup:   &sync.WaitGroup{},
 	}
 
-	for i := 1; i <= groupOptions.PoolSize; i++ {
-		go group.worker()
+	for i := 0; i < groupOptions.PoolSize; i++ {
+		go group.worker(i)
 	}
 	return group
 }
 
 // Group a group of workers executing functions concurrently
 type Group struct {
-	jobsChannel chan func()
+	jobsChannel chan Job
 	waitGroup   *sync.WaitGroup
 }
 
 // Add adds function to queue of jobs to execute
-func (g *Group) Add(function func()) error {
-	if function == nil {
+func (g *Group) Add(job Job) error {
+	if job == nil {
 		return errors.New(nilFunctionError)
 	}
 
 	g.waitGroup.Add(1)
-	g.jobsChannel <- function
+	g.jobsChannel <- job
 	return nil
 }
 
@@ -64,9 +66,9 @@ func (g *Group) Close() {
 	close(g.jobsChannel)
 }
 
-func (g *Group) worker() {
+func (g *Group) worker(id int) {
 	for job := range g.jobsChannel {
-		job()
+		job(id)
 		g.waitGroup.Done()
 	}
 }

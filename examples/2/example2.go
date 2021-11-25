@@ -12,13 +12,13 @@ func main() {
 	group := parallelizer.NewGroup()
 	defer group.Close()
 
-	group.Add(func() {
+	group.Add(func(workerId int) {
 		time.Sleep(2 * time.Second)
 
 		fmt.Println("Finished work 1")
 	})
 
-	group.Add(func() {
+	group.Add(func(workerId int) {
 		time.Sleep(2 * time.Second)
 
 		fmt.Println("Finished work 2")

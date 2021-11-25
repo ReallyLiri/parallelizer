@@ -29,13 +29,13 @@ func main() {
 	group := parallelizer.NewGroup()
 	defer group.Close()
 
-	group.Add(func() {
+	group.Add(func(workerId int) {
 		for char := 'a'; char < 'a'+3; char++ {
 			fmt.Printf("%c ", char)
 		}
 	})
 
-	group.Add(func() {
+	group.Add(func(workerId int) {
 		for number := 1; number < 4; number++ {
 			fmt.Printf("%d ", number)
 		}
@@ -76,13 +76,13 @@ func main() {
 	group := parallelizer.NewGroup()
 	defer group.Close()
 
-	group.Add(func() {
+	group.Add(func(workerId int) {
 		time.Sleep(2 * time.Second)
 
 		fmt.Println("Finished work 1")
 	})
 
-	group.Add(func() {
+	group.Add(func(workerId int) {
 		time.Sleep(2 * time.Second)
 
 		fmt.Println("Finished work 2")
@@ -128,7 +128,7 @@ func main() {
 
 	for i := 1; i <= 10; i++ {
 		i := i
-		group.Add(func() {
+		group.Add(func(workerId int) {
 			fmt.Print(i, " ")
 		})
 	}
@@ -167,7 +167,7 @@ func main() {
 
 	for i := 1; i <= 10; i++ {
 		i := i
-		group.Add(func() {
+		group.Add(func(workerId int) {
 			fmt.Print(i, " ")
 		})
 	}
@@ -206,7 +206,7 @@ func main() {
 	defer group.Close()
 
 	for i := 1; i <= 10; i++ {
-		group.Add(func() {
+		group.Add(func(workerId int) {
 			time.Sleep(time.Second)
 		})
 
@@ -257,7 +257,7 @@ func main() {
 	defer group.Close()
 
 	for i := 1; i <= 10; i++ {
-		group.Add(func() {
+		group.Add(func(workerId int) {
 			time.Sleep(time.Second)
 		})
 
@@ -307,7 +307,7 @@ func main() {
 	group := parallelizer.NewGroup()
 	defer group.Close()
 
-	group.Add(func() {
+	group.Add(func(workerId int) {
 		fmt.Println("Finished work")
 	})
 
@@ -340,11 +340,11 @@ func main() {
 	group := parallelizer.NewGroup()
 	defer group.Close()
 
-	group.Add(func() {
+	group.Add(func(workerId int) {
 		fmt.Println("Worker 1")
 	})
 
-	group.Add(func() {
+	group.Add(func(workerId int) {
 		fmt.Println("Worker 2")
 	})
 
@@ -354,7 +354,7 @@ func main() {
 
 	fmt.Println("Workers 1 and 2 have finished")
 
-	group.Add(func() {
+	group.Add(func(workerId int) {
 		fmt.Println("Worker 3")
 	})
 

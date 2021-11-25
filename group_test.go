@@ -44,13 +44,13 @@ func TestGroup_NoTimeout(t *testing.T) {
 	group := NewGroup()
 	defer group.Close()
 
-	err := group.Add(func() {
+	err := group.Add(func(i int) {
 		store1.Set(11)
 	})
 
 	assert.Nil(t, err)
 
-	err = group.Add(func() {
+	err = group.Add(func(i int) {
 		store2.Set(22)
 	})
 
@@ -70,11 +70,11 @@ func TestGroup_LongTimeout(t *testing.T) {
 	group := NewGroup()
 	defer group.Close()
 
-	group.Add(func() {
+	group.Add(func(i int) {
 		store1.Set(11)
 	})
 
-	group.Add(func() {
+	group.Add(func(i int) {
 		store2.Set(22)
 	})
 
@@ -95,12 +95,12 @@ func TestGroup_ShortTimeout(t *testing.T) {
 	group := NewGroup()
 	defer group.Close()
 
-	group.Add(func() {
+	group.Add(func(i int) {
 		time.Sleep(2 * time.Second)
 		store1.Set(11)
 	})
 
-	group.Add(func() {
+	group.Add(func(i int) {
 		time.Sleep(2 * time.Second)
 		store2.Set(22)
 	})
@@ -123,12 +123,12 @@ func TestGroup_CancelledContext(t *testing.T) {
 	group := NewGroup()
 	defer group.Close()
 
-	group.Add(func() {
+	group.Add(func(i int) {
 		time.Sleep(2 * time.Second)
 		store1.Set(11)
 	})
 
-	group.Add(func() {
+	group.Add(func(i int) {
 		time.Sleep(2 * time.Second)
 		store2.Set(22)
 	})
@@ -151,11 +151,11 @@ func TestGroup_LargeGroupSize(t *testing.T) {
 	group := NewGroup(WithPoolSize(100))
 	defer group.Close()
 
-	group.Add(func() {
+	group.Add(func(i int) {
 		store1.Set(11)
 	})
 
-	group.Add(func() {
+	group.Add(func(i int) {
 		store2.Set(22)
 	})
 
@@ -173,12 +173,12 @@ func TestGroup_SmallGroupSize(t *testing.T) {
 	group := NewGroup(WithPoolSize(1))
 	defer group.Close()
 
-	group.Add(func() {
+	group.Add(func(i int) {
 		time.Sleep(time.Second)
 		store1.Set(11)
 	})
 
-	group.Add(func() {
+	group.Add(func(i int) {
 		time.Sleep(time.Second)
 		store2.Set(22)
 	})
@@ -197,12 +197,12 @@ func TestGroup_SmallJobQueueSize(t *testing.T) {
 	group := NewGroup(WithJobQueueSize(1))
 	defer group.Close()
 
-	group.Add(func() {
+	group.Add(func(i int) {
 		time.Sleep(time.Second)
 		store1.Set(11)
 	})
 
-	group.Add(func() {
+	group.Add(func(i int) {
 		time.Sleep(time.Second)
 		store2.Set(22)
 	})

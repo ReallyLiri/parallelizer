@@ -11,7 +11,7 @@ func main() {
 	group := parallelizer.NewGroup()
 	defer group.Close()
 
-	group.Add(func() {
+	group.Add(func(workerId int) {
 		fmt.Println("Finished work")
 	})
 
